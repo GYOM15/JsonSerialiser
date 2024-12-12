@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CycleValidator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inf2050-a24-projet-equipe6</a> &gt; <a href="index.source.html" class="el_package">GROUPE6_INF2050.Validators</a> &gt; <span class="el_source">CycleValidator.java</span></div><h1>CycleValidator.java</h1><pre class="source lang-java linenums">package GROUPE6_INF2050.Validators;
+
+import GROUPE6_INF2050.Enums.Cycle;
+import GROUPE6_INF2050.Handlers.ErrorHandler;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static GROUPE6_INF2050.Validators.GeneralValidators.DateValidator.validate;
+
+
+public class CycleValidator {
+    private static Cycle currentCycle;
+
+    public static void setCurrentCycle(Cycle currentCycle) {
+<span class="fc" id="L18">        CycleValidator.currentCycle = currentCycle;</span>
+<span class="fc" id="L19">    }</span>
+
+<span class="fc" id="L21">    private static final List&lt;Cycle&gt; architectes_cycles = new ArrayList&lt;&gt;();</span>
+
+    /**
+     * Constructeur pour initialiser un cycle unique pour la validation.
+     *
+     * @param cycle Cycle spécifique pour l'initialisation
+     */
+<span class="fc" id="L28">    public CycleValidator(Cycle cycle) {</span>
+<span class="fc" id="L29">        setCurrentCycle(cycle);</span>
+<span class="fc" id="L30">    }</span>
+
+    /**
+     * Constructeur pour initialiser plusieurs cycles pour la validation.
+     *
+     * @param cycles Tableau de cycles pour initialiser la liste des cycles valides
+     */
+<span class="fc" id="L37">    public CycleValidator(Cycle... cycles) {</span>
+<span class="fc" id="L38">        architectes_cycles.addAll(Arrays.asList(cycles));</span>
+<span class="fc" id="L39">    }</span>
+
+    /**
+     * Définit le cycle de validation actuel si celui-ci fait partie de la liste des cycles valides.
+     *
+     * @param cycle Cycle à définir comme cycle de validation
+     */
+    public static void setCycle(Cycle cycle) {
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        if (architectes_cycles.contains(cycle)) {</span>
+<span class="fc" id="L48">            setCurrentCycle(cycle);</span>
+        }
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * Vérifie si une date donnée se situe dans les limites du cycle en cours.
+     *
+     * @param dateValue Date sous forme de chaîne (String)
+     * @param errorHandler Gestionnaire d'erreurs pour enregistrer les erreurs éventuelles
+     * @return true si la date est dans le cycle, sinon false
+     */
+    public static boolean isDateWithinCycle(String dateValue, ErrorHandler errorHandler) {
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        if (!validate(dateValue, null)) {</span>
+<span class="fc" id="L61">            return true;</span>
+        }
+<span class="fc" id="L63">        LocalDate date = LocalDate.parse(dateValue);</span>
+<span class="pc bpc" id="L64" title="1 of 4 branches missed.">        if (date.isBefore(currentCycle.getStartDate()) || date.isAfter(currentCycle.getEndDate())) {</span>
+<span class="fc" id="L65">            ErrorHandler.addErrorIfNotNull(errorHandler, &quot;La date &quot; + dateValue + &quot; doit être dans le cycle &quot; + currentCycle.getLabel() + &quot;.&quot;);</span>
+<span class="fc" id="L66">            return true;</span>
+        }
+<span class="fc" id="L68">        return false;</span>
+    }
+
+
+
+    /**
+     * Retourne la liste des cycles d'architectes.
+     *
+     * @return Liste des cycles valides pour les architectes
+     */
+    public static List&lt;Cycle&gt; getArchitectesCycle() {
+<span class="fc" id="L79">        return architectes_cycles;</span>
+    }
+
+    public static Cycle getCycle(){
+<span class="fc" id="L83">        return currentCycle;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

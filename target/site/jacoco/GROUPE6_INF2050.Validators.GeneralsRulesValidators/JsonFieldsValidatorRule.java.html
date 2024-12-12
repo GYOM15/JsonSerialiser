@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JsonFieldsValidatorRule.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inf2050-a24-projet-equipe6</a> &gt; <a href="index.source.html" class="el_package">GROUPE6_INF2050.Validators.GeneralsRulesValidators</a> &gt; <span class="el_source">JsonFieldsValidatorRule.java</span></div><h1>JsonFieldsValidatorRule.java</h1><pre class="source lang-java linenums">package GROUPE6_INF2050.Validators.GeneralsRulesValidators;
+
+import GROUPE6_INF2050.Utilities.JsonFileUtility;
+import GROUPE6_INF2050.Validators.GeneralsRulesValidators.Interfaces.ValidationRule;
+import net.sf.json.JSONObject;
+import GROUPE6_INF2050.Enums.ActivityOrder;
+import GROUPE6_INF2050.Enums.Cycle;
+import GROUPE6_INF2050.Handlers.ErrorHandler;
+
+import java.util.Arrays;
+import java.util.List;
+
+<span class="fc" id="L13">public class JsonFieldsValidatorRule implements ValidationRule {</span>
+<span class="fc" id="L14">    private static final List&lt;String&gt; requiredKeys = Arrays.asList(&quot;numero_de_permis&quot;, &quot;cycle&quot;, &quot;ordre&quot;, &quot;activites&quot;);</span>
+<span class="fc" id="L15">    private static final List&lt;String&gt; requiredActivitiesKeys = Arrays.asList(&quot;description&quot;, &quot;categorie&quot;, &quot;heures&quot;, &quot;date&quot;);</span>
+
+    /**
+     * Validates all required fields in the JSON object and logs specific error messages.     *     * @param jsonObject   The JSON object to validate.     * @param errorHandler The error handler to log validation errors.     * @param errorMessage The error message accumulator for detailed validation results.     * @return true if all fields are valid; false otherwise.
+     */
+    public static boolean areAllFieldsValid(JSONObject jsonObject, ErrorHandler errorHandler, StringBuilder errorMessage) {
+<span class="pc bpc" id="L21" title="2 of 8 branches missed.">        return checkRequiredKeys(jsonObject, errorHandler, errorMessage) &amp;&amp; checkArchitecteSpecificKey(jsonObject, errorHandler, errorMessage) &amp;&amp; validateCycleByOrder(jsonObject, errorHandler, errorMessage) &amp;&amp; checkActivitiesFields(jsonObject, errorHandler, errorMessage);</span>
+    }
+
+    private static boolean checkRequiredKeys(JSONObject jsonObject, ErrorHandler errorHandler, StringBuilder errorMessage) {
+<span class="fc" id="L25">        boolean isValid = true;</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        for (String key : requiredKeys) {</span>
+<span class="fc bfc" id="L27" title="All 2 branches covered.">            if (!jsonObject.containsKey(key)) {</span>
+<span class="fc" id="L28">                String error = &quot;La clé obligatoire '&quot; + key + &quot;' est manquante dans le fichier JSON.&quot;;</span>
+<span class="fc" id="L29">                ErrorHandler.addErrorIfNotNull(errorHandler, error);</span>
+<span class="fc" id="L30">                errorMessage.append(&quot;- &quot;).append(error).append(&quot;\n&quot;);</span>
+<span class="fc" id="L31">                isValid = false;</span>
+            }
+<span class="fc" id="L33">        }</span>
+<span class="fc" id="L34">        return isValid;</span>
+    }
+
+    private static boolean checkArchitecteSpecificKey(JSONObject jsonObject, ErrorHandler errorHandler, StringBuilder errorMessage) {
+<span class="fc" id="L38">        boolean hasTransferHoursKey = jsonObject.containsKey(&quot;heures_transferees_du_cycle_precedent&quot;);</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">        if (&quot;architectes&quot;.equalsIgnoreCase(jsonObject.optString(&quot;ordre&quot;)) != hasTransferHoursKey) {</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            String error = hasTransferHoursKey ? &quot;La clé 'heures_transferees_du_cycle_precedent' ne doit être utilisée que pour l'ordre 'architectes'.&quot; : &quot;La clé 'heures_transferees_du_cycle_precedent' est requise pour l'ordre 'architectes'.&quot;;</span>
+<span class="nc" id="L41">            errorMessage.append(&quot;- &quot;).append(error).append(&quot;\n&quot;);</span>
+<span class="nc" id="L42">            return false;</span>
+        }
+<span class="fc" id="L44">        return true;</span>
+    }
+
+    private static boolean validateCycleByOrder(JSONObject jsonObject, ErrorHandler errorHandler, StringBuilder errorMessage) {
+<span class="fc" id="L48">        Cycle cycle = Cycle.getCycleByLabel(jsonObject.optString(&quot;cycle&quot;, null));</span>
+<span class="pc bpc" id="L49" title="2 of 4 branches missed.">        if (cycle == null || ActivityOrder.isCycleValidByOrder(cycle, ActivityOrder.searchFromJsonOrder(jsonObject.optString(&quot;ordre&quot;, null)))) {</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">            String error = &quot;Le cycle '&quot; + (cycle != null ? cycle.getLabel() : &quot;inconnu&quot;) + &quot;' n'est pas valide pour l'ordre '&quot; + ActivityOrder.searchFromJsonOrder(jsonObject.optString(&quot;ordre&quot;, null)).getOrderString() + &quot;'.&quot;;</span>
+<span class="nc" id="L51">            ErrorHandler.addErrorIfNotNull(errorHandler, error);</span>
+<span class="nc" id="L52">            errorMessage.append(&quot;- &quot;).append(error).append(&quot;\n&quot;);</span>
+<span class="nc" id="L53">            return false;</span>
+        }
+<span class="fc" id="L55">        return true;</span>
+    }
+
+    private static boolean checkActivitiesFields(JSONObject jsonObject, ErrorHandler errorHandler, StringBuilder errorMessage) {
+<span class="fc" id="L59">        boolean isValid = true;</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">        for (int i = 0; i &lt; jsonObject.getJSONArray(&quot;activites&quot;).size(); i++) {</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">            for (String key : requiredActivitiesKeys) {</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">                if (!jsonObject.getJSONArray(&quot;activites&quot;).getJSONObject(i).containsKey(key)) {</span>
+<span class="fc" id="L63">                    String error = &quot;L'activité &quot; + (i + 1) + &quot; manque la clé obligatoire '&quot; + key + &quot;'.&quot;;</span>
+<span class="fc" id="L64">                    ErrorHandler.addErrorIfNotNull(errorHandler, error);</span>
+<span class="fc" id="L65">                    errorMessage.append(&quot;- &quot;).append(error).append(&quot;\n&quot;);</span>
+<span class="fc" id="L66">                    isValid = false;</span>
+                }
+<span class="fc" id="L68">            }</span>
+        }
+<span class="fc" id="L70">        return isValid;</span>
+    }
+
+    @Override
+    public boolean validate(JsonFileUtility jsonFileUtility, ErrorHandler errorHandler, StringBuilder errorMessage) {
+<span class="fc" id="L75">        return areAllFieldsValid(jsonFileUtility.getJsonObject(), errorHandler, errorMessage);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

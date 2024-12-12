@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ActivityCategory.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inf2050-a24-projet-equipe6</a> &gt; <a href="index.source.html" class="el_package">GROUPE6_INF2050.Enums</a> &gt; <span class="el_source">ActivityCategory.java</span></div><h1>ActivityCategory.java</h1><pre class="source lang-java linenums">package GROUPE6_INF2050.Enums;
+
+import GROUPE6_INF2050.Handlers.ErrorHandler;
+
+/**
+ * Cette Enumération nous permet d'ajouter et de mieux manipuler nos catégories à des fins de vérification.
+ * Chaque catégorie peut avoir une limite d'heures ou être sans limite.
+ */
+<span class="fc" id="L9">public enum ActivityCategory {</span>
+<span class="fc" id="L10">    COURS(&quot;cours&quot;),</span>
+<span class="fc" id="L11">    ATELIER(&quot;atelier&quot;),</span>
+<span class="fc" id="L12">    SEMINAIRE(&quot;séminaire&quot;),</span>
+<span class="fc" id="L13">    COLLOQUE(&quot;colloque&quot;),</span>
+<span class="fc" id="L14">    CONFERENCE(&quot;conférence&quot;),</span>
+<span class="fc" id="L15">    LECTURE_DIRIGEE(&quot;lecture dirigée&quot;),</span>
+<span class="fc" id="L16">    PRESENTATION(&quot;présentation&quot;),</span>
+<span class="fc" id="L17">    GROUPE_DE_DISCUSSION(&quot;groupe de discussion&quot;),</span>
+<span class="fc" id="L18">    PROJET_DE_RECHERCHE(&quot;projet de recherche&quot;),</span>
+<span class="fc" id="L19">    REDACTION_PROFESSIONNELLE(&quot;rédaction professionnelle&quot;),</span>
+<span class="fc" id="L20">    CATEGORIE_NON_VALIDE(&quot;non valide&quot;);</span>
+
+    private final String categoryFromJsonObj;
+
+    /**
+     * Constructeur pour les catégories sans limitation d'heures.
+     *
+     * @param categoryFromJsonObj La catégorie du fichier Json
+     */
+<span class="fc" id="L29">    ActivityCategory(String categoryFromJsonObj) {</span>
+<span class="fc" id="L30">        this.categoryFromJsonObj = categoryFromJsonObj;</span>
+<span class="fc" id="L31">    }</span>
+
+    public String getCategoryFromJsonObj() {
+<span class="fc" id="L34">        return categoryFromJsonObj;</span>
+    }
+    /**
+     * Recherche dans l'énumération si la catégorie contenue dans l'objet JSON correspond à l'une
+     * des catégories déclarées dans l'énumération, tout en ignorant la casse.
+     *
+     * @param label        La catégorie récupérée de l'objet JSON.
+     * @param errorHandler Enregistre l'erreur si la catégorie n'est pas valide.
+     * @return La catégorie concernée si trouvée ou retourne CATEGORIE_NON_VALIDE.
+     */
+    public static ActivityCategory searchFromJsonCategory(String label, ErrorHandler errorHandler) {
+<span class="fc bfc" id="L45" title="All 2 branches covered.">        for (ActivityCategory category : ActivityCategory.values()) {</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">            if (category.categoryFromJsonObj.equalsIgnoreCase(label)) {</span>
+<span class="fc" id="L47">                return category;</span>
+            }
+        }
+<span class="fc" id="L50">        addErrorIfHandlerPresent(label, errorHandler);</span>
+<span class="fc" id="L51">        return CATEGORIE_NON_VALIDE;</span>
+    }
+
+    /**
+     * Ajoute une erreur au gestionnaire d'erreurs lorsqu'une catégorie n'est pas valide.
+     *
+     * @param label        La catégorie récupérée de l'objet JSON.
+     * @param errorHandler Enregistre les erreurs. Si null, aucune action n'est effectuée.
+     */
+    private static void addErrorIfHandlerPresent(String label, ErrorHandler errorHandler) {
+<span class="fc" id="L61">       ErrorHandler.addErrorIfNotNull(errorHandler,&quot;La catégorie &quot; + label + &quot; n'est pas valide&quot;);</span>
+<span class="fc" id="L62">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

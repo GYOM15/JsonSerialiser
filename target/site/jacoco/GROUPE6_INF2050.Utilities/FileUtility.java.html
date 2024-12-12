@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileUtility.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inf2050-a24-projet-equipe6</a> &gt; <a href="index.source.html" class="el_package">GROUPE6_INF2050.Utilities</a> &gt; <span class="el_source">FileUtility.java</span></div><h1>FileUtility.java</h1><pre class="source lang-java linenums">package GROUPE6_INF2050.Utilities;
+
+import GROUPE6_INF2050.Exceptions.Groupe6INF2050Exception;
+
+/**
+ * Est une classe abstraite de laquelle hériteront toutes les classes qui s'occupent du traitement de fichiers
+ * Les classes filles auront toutes besoin d'un fichier en entrée et en sortie.
+ */
+public  abstract class FileUtility {
+
+    public final String inputFile;
+    public String outputFile;
+
+    /**
+     * Constructeur de la classe FileUtility
+     *Il initialise les fichiers d'entrée et de sortie
+     *
+     * @param inputFile Le fichier JSON en entrée
+     * @param outputFile    Le fichier JSON de sortie
+     */
+<span class="fc" id="L21">    public FileUtility(String inputFile, String outputFile) {</span>
+<span class="fc" id="L22">        this.inputFile = inputFile;</span>
+<span class="fc" id="L23">        this.outputFile = outputFile;</span>
+<span class="fc" id="L24">    }</span>
+
+    /**
+     * Cette méthode sera utilisée par toutes les classes filles pour charger et valider les fichiers en entrée.
+     *
+     * @throws Groupe6INF2050Exception  Ramène une exception si une erreur est trouvée
+     */
+    public abstract void loadAndValid() throws Groupe6INF2050Exception;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ActivityStatistics.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inf2050-a24-projet-equipe6</a> &gt; <a href="index.source.html" class="el_package">GROUPE6_INF2050.Reporting</a> &gt; <span class="el_source">ActivityStatistics.java</span></div><h1>ActivityStatistics.java</h1><pre class="source lang-java linenums">package GROUPE6_INF2050.Reporting;
+
+import GROUPE6_INF2050.Utilities.JsonFileUtility;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import GROUPE6_INF2050.Enums.ActivityCategory;
+
+import java.util.EnumMap;
+import java.util.Map;
+
+/**
+ * Classe dédiée aux statistiques des activités dans les déclarations.
+ */
+<span class="nc" id="L14">public class ActivityStatistics {</span>
+
+    /**
+     * Renvoie le nombre total d'activités valides après vérification des catégories.
+     *
+     * @param jsonFileUtility Utilitaire JSON pour accéder aux activités.
+     * @return Le nombre total d'activités valides.
+     */
+    public static int getTotalValidActivities(JsonFileUtility jsonFileUtility) {
+<span class="fc" id="L23">        JSONArray activities = jsonFileUtility.getJsonArray();</span>
+<span class="fc" id="L24">        int count = 0;</span>
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        for (Object activityObj : activities) {</span>
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">            if (activityObj instanceof JSONObject activity) {</span>
+<span class="fc" id="L27">                String category = activity.optString(&quot;categorie&quot;, &quot;&quot;);</span>
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">                if (ActivityCategory.searchFromJsonCategory(category, null) != ActivityCategory.CATEGORIE_NON_VALIDE) { count++; }</span>
+            }
+<span class="fc" id="L30">        } return count;</span>
+    }
+
+    /**
+     * Renvoie le nombre d'activités par catégorie.
+     *
+     * @param jsonFileUtility Utilitaire JSON pour accéder aux activités.
+     * @return Une carte (Map) avec les catégories comme clés et le nombre d'activités comme valeurs.
+     */
+    public static Map&lt;ActivityCategory, Integer&gt; getTotalActivitiesByCategory(JsonFileUtility jsonFileUtility) {
+<span class="fc" id="L40">        JSONArray activities = jsonFileUtility.getJsonArray();</span>
+<span class="fc" id="L41">        Map&lt;ActivityCategory, Integer&gt; categoryCounts = new EnumMap&lt;&gt;(ActivityCategory.class);</span>
+<span class="fc" id="L42">        activities.forEach(activityObj -&gt; {</span>
+<span class="fc" id="L43">            JSONObject activity = (JSONObject) activityObj;</span>
+<span class="fc" id="L44">            String categoryLabel = activity.optString(&quot;categorie&quot;, &quot;&quot;);</span>
+<span class="fc" id="L45">            ActivityCategory category = ActivityCategory.searchFromJsonCategory(categoryLabel, null);</span>
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">            if (category != ActivityCategory.CATEGORIE_NON_VALIDE) {</span>
+<span class="fc" id="L47">                categoryCounts.put(category, categoryCounts.getOrDefault(category, 0) + 1);</span>
+            }
+<span class="fc" id="L49">        }); return categoryCounts;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PersonValidatorRule.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inf2050-a24-projet-equipe6</a> &gt; <a href="index.source.html" class="el_package">GROUPE6_INF2050.Validators.GeneralsRulesValidators</a> &gt; <span class="el_source">PersonValidatorRule.java</span></div><h1>PersonValidatorRule.java</h1><pre class="source lang-java linenums">package GROUPE6_INF2050.Validators.GeneralsRulesValidators;
+
+import GROUPE6_INF2050.Validators.GeneralsRulesValidators.Interfaces.ValidationRule;
+import GROUPE6_INF2050.Utilities.JsonFileUtility;
+import GROUPE6_INF2050.Handlers.ErrorHandler;
+
+/**
+ * Règle de validation pour les informations personnelles (nom, prénom, sexe).
+ */
+<span class="fc" id="L10">public class PersonValidatorRule implements ValidationRule {</span>
+    private static Integer gender;
+
+    public static Integer getGender() {
+<span class="fc" id="L14">        return gender;</span>
+    }
+
+    /**
+     * Valide les informations personnelles extraites d'un fichier JSON.
+     *
+     * @param jsonFileUtility Utilitaire pour lire les données JSON.
+     * @param errorHandler    Gestionnaire d'erreurs pour enregistrer les problèmes.
+     * @param errorMessage    StringBuilder pour accumuler les messages d'erreur.
+     * @return true si les informations sont valides, sinon false.
+     */
+    @Override
+    public boolean validate(JsonFileUtility jsonFileUtility, ErrorHandler errorHandler, StringBuilder errorMessage) {
+<span class="fc" id="L27">        boolean isValid = true;</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        gender = jsonFileUtility.getJsonObject().has(&quot;sexe&quot;) ? jsonFileUtility.getJsonObject().optInt(&quot;sexe&quot;) : null;</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if (!validateLastName(jsonFileUtility.getJsonObject().optString(&quot;nom&quot;, null), errorHandler, errorMessage)) {</span>
+<span class="fc" id="L30">            isValid = false;</span>
+        }
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (!validateFirstName(jsonFileUtility.getJsonObject().optString(&quot;prenom&quot;, null), errorHandler, errorMessage)) {</span>
+<span class="fc" id="L33">            isValid = false;</span>
+        }
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (!validateGender(gender, errorHandler, errorMessage)) {</span>
+<span class="fc" id="L36">            isValid = false;</span>
+        }
+<span class="fc" id="L38">        return isValid;</span>
+    }
+
+    private boolean validateLastName(String lastName, ErrorHandler errorHandler, StringBuilder errorMessage) {
+<span class="fc bfc" id="L42" title="All 4 branches covered.">        if (lastName == null || !lastName.matches(&quot;^[a-zA-ZÀ-ÖØ-öø-ÿ-]+$&quot;)) {</span>
+<span class="fc" id="L43">            String error = &quot;Le champ nom est requis ou invalide.&quot;;</span>
+<span class="fc" id="L44">            ErrorHandler.addErrorIfNotNull(errorHandler, error);</span>
+<span class="fc" id="L45">            errorMessage.append(&quot;- &quot;).append(error).append(&quot;\n&quot;);</span>
+<span class="fc" id="L46">            return false;</span>
+        }
+<span class="fc" id="L48">        return true;</span>
+    }
+
+    private boolean validateFirstName(String firstName, ErrorHandler errorHandler, StringBuilder errorMessage) {
+<span class="fc bfc" id="L52" title="All 4 branches covered.">        if (firstName == null || !firstName.matches(&quot;^[a-zA-ZÀ-ÖØ-öø-ÿ-]+$&quot;)) {</span>
+<span class="fc" id="L53">            String error = &quot;Le champ prénom est requis ou invalide.&quot;;</span>
+<span class="fc" id="L54">            ErrorHandler.addErrorIfNotNull(errorHandler, error);</span>
+<span class="fc" id="L55">            errorMessage.append(&quot;- &quot;).append(error).append(&quot;\n&quot;);</span>
+<span class="fc" id="L56">            return false;</span>
+        }
+<span class="fc" id="L58">        return true;</span>
+    }
+
+    private boolean validateGender(Integer gender, ErrorHandler errorHandler, StringBuilder errorMessage) {
+<span class="pc bpc" id="L62" title="1 of 6 branches missed.">        if (gender == null || gender &lt; 0 || gender &gt; 2) {</span>
+<span class="fc" id="L63">            String error = &quot;Le champ sexe doit être conforme à la norme ISO 5218 (0=Non spécifié, 1=Masculin, 2=Féminin).&quot;;</span>
+<span class="fc" id="L64">            ErrorHandler.addErrorIfNotNull(errorHandler, error);</span>
+<span class="fc" id="L65">            errorMessage.append(&quot;- &quot;).append(error).append(&quot;\n&quot;);</span>
+<span class="fc" id="L66">            return false;</span>
+        }
+<span class="fc" id="L68">        return true;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ActivityOrder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inf2050-a24-projet-equipe6</a> &gt; <a href="index.source.html" class="el_package">GROUPE6_INF2050.Enums</a> &gt; <span class="el_source">ActivityOrder.java</span></div><h1>ActivityOrder.java</h1><pre class="source lang-java linenums">package GROUPE6_INF2050.Enums;
+
+import GROUPE6_INF2050.Validators.CycleValidator;
+
+<span class="fc" id="L5">public enum ActivityOrder {</span>
+<span class="fc" id="L6">    ARCHITECTES(&quot;architectes&quot;, new CycleValidator(Cycle.getCycleByLabel(&quot;2023-2025&quot;), Cycle.getCycleByLabel(&quot;2020-2022&quot;), Cycle.getCycleByLabel(&quot;2018-2020&quot;))),</span>
+<span class="fc" id="L7">    GEOLOGUES(&quot;géologues&quot;,  new CycleValidator(Cycle.getCycleByLabel(&quot;2021-2024&quot;))),</span>
+<span class="fc" id="L8">    PSYCHOLOGUES(&quot;psychologues&quot;, new CycleValidator(Cycle.getCycleByLabel(&quot;2020-2025&quot;))),</span>
+<span class="fc" id="L9">    PODIATRES(&quot;podiatres&quot;, new CycleValidator(Cycle.getCycleByLabel(&quot;2021-2024&quot;))),</span>
+<span class="fc" id="L10">    ORDER_NON_VALIDE(&quot;Ordre Inconu&quot;, null);</span>
+
+    public String getOrderString() {
+<span class="fc" id="L13">        return order;</span>
+    }
+
+    private final String order;
+    private static ActivityOrder currentOrder;
+
+    public static void setCurrentOrder(ActivityOrder currentOrder) {
+<span class="fc" id="L20">        ActivityOrder.currentOrder = currentOrder;</span>
+<span class="fc" id="L21">    }</span>
+
+    public static ActivityOrder getCurrentOrder() {
+<span class="fc" id="L24">        return currentOrder;</span>
+    }
+
+<span class="fc" id="L27">    ActivityOrder(String order, CycleValidator cycleValidator) {</span>
+<span class="fc" id="L28">        this.order = order;</span>
+<span class="fc" id="L29">    }</span>
+
+    /**
+     * Vérifie si un cycle est valide pour un ordre donné.
+     *
+     * @param cycle Le cycle à valider
+     * @param order L'ordre auquel le cycle doit correspondre
+     * @return true si le cycle est valide pour l'ordre, sinon false
+     */
+    public static boolean isCycleValidByOrder(Cycle cycle, ActivityOrder order) {
+<span class="fc bfc" id="L39" title="All 4 branches covered.">        if (order == ARCHITECTES &amp;&amp; CycleValidator.getArchitectesCycle().contains(cycle) ) {</span>
+<span class="fc" id="L40">            CycleValidator.setCycle(cycle);</span>
+<span class="fc" id="L41">            return false;</span>
+        }
+<span class="fc bfc" id="L43" title="All 4 branches covered.">        if (order == GEOLOGUES &amp;&amp; cycle == Cycle.CYCLE_2021_2024) {</span>
+<span class="fc" id="L44">            return false;</span>
+        }
+<span class="fc bfc" id="L46" title="All 4 branches covered.">        if (order == PODIATRES &amp;&amp; cycle == Cycle.CYCLE_2021_2024){</span>
+<span class="fc" id="L47">            return false;</span>
+        }
+<span class="fc bfc" id="L49" title="All 4 branches covered.">        return order != PSYCHOLOGUES || cycle != Cycle.CYCLE_2020_2025;</span>
+    }
+
+
+    /**
+     * Recherche et retourne l'ActivityOrder correspondant au label donné dans le fichier JSON.
+     * Si l'ordre n'est pas trouvé, enregistre une erreur dans ErrorHandler et retourne ORDER_NON_VALIDE.
+     *
+     * @param label         Le label de l'ordre à rechercher.
+     * @return L'ActivityOrder correspondant au label, ou ORDER_NON_VALIDE si le label est introuvable.
+     */
+    public static ActivityOrder searchFromJsonOrder(String label) {
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        for (ActivityOrder order : ActivityOrder.values()) {</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">            if (order.order.equalsIgnoreCase(label)) {</span>
+<span class="fc" id="L63">                return order;</span>
+            }
+        }
+<span class="fc" id="L66">        return ORDER_NON_VALIDE;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

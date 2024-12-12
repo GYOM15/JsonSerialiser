@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Cycle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inf2050-a24-projet-equipe6</a> &gt; <a href="index.source.html" class="el_package">GROUPE6_INF2050.Enums</a> &gt; <span class="el_source">Cycle.java</span></div><h1>Cycle.java</h1><pre class="source lang-java linenums">package GROUPE6_INF2050.Enums;
+
+import java.time.LocalDate;
+
+<span class="fc" id="L5">public enum Cycle {</span>
+<span class="fc" id="L6">    CYCLE_2023_2025(&quot;2023-2025&quot;, LocalDate.of(2023, 4, 1), LocalDate.of(2025, 4, 1)),</span>
+<span class="fc" id="L7">    CYCLE_2020_2022(&quot;2020-2022&quot;, LocalDate.of(2020, 4, 1), LocalDate.of(2022, 4, 1)),</span>
+<span class="fc" id="L8">    CYCLE_2018_2020(&quot;2018-2020&quot;, LocalDate.of(2018, 4, 1), LocalDate.of(2020, 7, 1)),</span>
+<span class="fc" id="L9">    CYCLE_2021_2024(&quot;2021-2024&quot;, LocalDate.of(2021, 6, 1), LocalDate.of(2024, 6, 1)),</span>
+<span class="fc" id="L10">    CYCLE_2020_2025(&quot;2020-2025&quot;, LocalDate.of(2020, 1, 1), LocalDate.of(2025, 1, 1)),</span>
+<span class="fc" id="L11">    DEFAULT_CYCLE(&quot;Cycle Invalide&quot;, LocalDate.MIN, LocalDate.MAX);</span>
+
+    private final String label;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
+
+
+
+<span class="fc" id="L19">    Cycle(String label, LocalDate startDate, LocalDate endDate) {</span>
+<span class="fc" id="L20">        this.label = label;</span>
+<span class="fc" id="L21">        this.startDate = startDate;</span>
+<span class="fc" id="L22">        this.endDate = endDate;</span>
+<span class="fc" id="L23">    }</span>
+
+    public String getLabel() {
+<span class="fc" id="L26">        return label;</span>
+    }
+
+    public LocalDate getStartDate() {
+<span class="fc" id="L30">        return startDate;</span>
+    }
+
+    public LocalDate getEndDate() {
+<span class="fc" id="L34">        return endDate;</span>
+    }
+
+    public static Cycle getCycleByLabel(String label) {
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        for (Cycle cycle : Cycle.values()) {</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">            if (cycle.getLabel().equalsIgnoreCase(label)) {</span>
+<span class="fc" id="L40">                return cycle;</span>
+            }
+        }
+<span class="fc" id="L43">        return DEFAULT_CYCLE;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
