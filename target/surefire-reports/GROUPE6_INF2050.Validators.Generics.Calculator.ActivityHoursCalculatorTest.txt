@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: GROUPE6_INF2050.Validators.Generics.Calculator.ActivityHoursCalculatorTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 s -- in GROUPE6_INF2050.Validators.Generics.Calculator.ActivityHoursCalculatorTest
